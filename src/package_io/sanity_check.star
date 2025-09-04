@@ -267,6 +267,7 @@ SUBCATEGORY_PARAMS = {
         "image",
         "verif_image",
         "frontend_image",
+        "frontend_env",
     ],
     "dora_params": [
         "image",

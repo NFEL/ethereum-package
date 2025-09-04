@@ -822,6 +822,11 @@ blockscout_params:
   # Frontend image
   # Defaults to ghcr.io/blockscout/frontend:latest
   frontend_image: "ghcr.io/blockscout/frontend:latest"
+  # Overwrite default environment variables
+  # e.g.  NEXT_PUBLIC_APP_HOST
+  frontend_env:
+    NEXT_PUBLIC_APP_HOST: <SUB_DOMAIN>
+    ABC: ABC
 
 # Configuration place for dora the explorer - https://github.com/ethpandaops/dora
 dora_params:

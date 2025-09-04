@@ -165,7 +165,8 @@ def get_config_verif(
         env_vars={
             "SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR": "0.0.0.0:{}".format(
                 HTTP_PORT_NUMBER_VERIF
-            )
+            ),
+            **blockscout_params.frontend_env,
         },
         min_cpu=BLOCKSCOUT_VERIF_MIN_CPU,
         max_cpu=BLOCKSCOUT_VERIF_MAX_CPU,
