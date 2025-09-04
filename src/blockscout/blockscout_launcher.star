@@ -154,10 +154,7 @@ def get_config_verif(
         additional_service_index,
         0,
     )
-    envs = blockscout_params.frontend_env
-    envs.update(SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR= "0.0.0.0:{}".format(
-                HTTP_PORT_NUMBER_VERIF
-            ))
+
     return ServiceConfig(
         image=shared_utils.docker_cache_image_calc(
             docker_cache_params,
@@ -165,7 +162,11 @@ def get_config_verif(
         ),
         ports=VERIF_USED_PORTS,
         public_ports=public_ports,
-        env_vars=envs,
+        env_vars={
+            "SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR": "0.0.0.0:{}".format(
+                HTTP_PORT_NUMBER_VERIF
+            )
+        },
         min_cpu=BLOCKSCOUT_VERIF_MIN_CPU,
         max_cpu=BLOCKSCOUT_VERIF_MAX_CPU,
         min_memory=BLOCKSCOUT_VERIF_MIN_MEMORY,
@@ -253,14 +254,7 @@ def get_config_frontend(
     blockscout_service,
     port_publisher,
 ):
-    return ServiceConfig(
-        image=shared_utils.docker_cache_image_calc(
-            docker_cache_params,
-            blockscout_params.frontend_image,
-        ),
-        ports=FRONTEND_USED_PORTS,
-        public_ports=FRONTEND_USED_PORTS,
-        env_vars={
+    envs = {
             "HOSTNAME": "0.0.0.0",
             "NEXT_PUBLIC_API_PROTOCOL": "http",
             "NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL": "ws",
@@ -277,13 +271,24 @@ def get_config_frontend(
             "NEXT_PUBLIC_HAS_BEACON_CHAIN": "true",
             "NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE": "validation",
             "NEXT_PUBLIC_NETWORK_ICON": "https://ethpandaops.io/logo.png",
-            # "NEXT_PUBLIC_APP_HOST": "0.0.0.0",
+            "NEXT_PUBLIC_APP_HOST": "0.0.0.0",
             "NEXT_PUBLIC_APP_PROTOCOL": "http",
-            "NEXT_PUBLIC_APP_HOST": "127.0.0.1",
             "NEXT_PUBLIC_APP_PORT": str(HTTP_PORT_NUMBER_FRONTEND),
             "NEXT_PUBLIC_USE_NEXT_JS_PROXY": "true",
             "PORT": str(HTTP_PORT_NUMBER_FRONTEND),
-        },
+        }
+
+    for k,v in blockscout_params.frontend_envs.items():
+        envs[k] = v
+
+    return ServiceConfig(
+        image=shared_utils.docker_cache_image_calc(
+            docker_cache_params,
+            blockscout_params.frontend_image,
+        ),
+        ports=FRONTEND_USED_PORTS,
+        public_ports=FRONTEND_USED_PORTS,
+        env_vars=envs,
         min_cpu=BLOCKSCOUT_MIN_CPU,
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
