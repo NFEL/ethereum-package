@@ -155,7 +155,7 @@ def get_config_verif(
         0,
     )
     envs = blockscout_params.frontend_env
-    envs.update("SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR"= "0.0.0.0:{}".format(
+    envs.update(SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR= "0.0.0.0:{}".format(
                 HTTP_PORT_NUMBER_VERIF
             ))
     return ServiceConfig(
