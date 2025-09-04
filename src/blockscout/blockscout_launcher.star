@@ -154,7 +154,10 @@ def get_config_verif(
         additional_service_index,
         0,
     )
-
+    envs = blockscout_params.frontend_env
+    envs.update("SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR"= "0.0.0.0:{}".format(
+                HTTP_PORT_NUMBER_VERIF
+            ))
     return ServiceConfig(
         image=shared_utils.docker_cache_image_calc(
             docker_cache_params,
@@ -162,12 +165,7 @@ def get_config_verif(
         ),
         ports=VERIF_USED_PORTS,
         public_ports=public_ports,
-        env_vars={
-            "SMART_CONTRACT_VERIFIER__SERVER__HTTP__ADDR": "0.0.0.0:{}".format(
-                HTTP_PORT_NUMBER_VERIF
-            ),
-            **blockscout_params.frontend_env,
-        },
+        env_vars=envs,
         min_cpu=BLOCKSCOUT_VERIF_MIN_CPU,
         max_cpu=BLOCKSCOUT_VERIF_MAX_CPU,
         min_memory=BLOCKSCOUT_VERIF_MIN_MEMORY,
