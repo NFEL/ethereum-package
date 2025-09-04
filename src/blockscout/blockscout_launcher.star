@@ -278,7 +278,7 @@ def get_config_frontend(
             "PORT": str(HTTP_PORT_NUMBER_FRONTEND),
         }
 
-    for k,v in blockscout_params.frontend_envs.items():
+    for k,v in blockscout_params.frontend_env.items():
         envs[k] = v
 
     return ServiceConfig(
